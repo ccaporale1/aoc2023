@@ -3,9 +3,67 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 
 void main() {
-  day1();
+  //day1();
+  day2();
 
 }
+
+void day2() {
+  var filePath = p.join(Directory.current.path, 'lib/puzzle_inputs', 'day2.txt');
+  File file = File(filePath);
+  var lines = file.readAsLinesSync();
+  var sum = 0;
+  var limits = {'red':12,'green':13,'blue':14};
+
+  for(final e in lines){
+    var eSplit = e.split(':');
+    int gameNum = int.parse(eSplit[0].replaceAll(RegExp(r'[^0-9]'),'')); 
+    var pulls = eSplit[1].split(';');
+    bool gameCounts = true;
+    for (final pull in pulls) {
+      var balls = pull.split(',');
+      for (final eval in balls) {
+
+        var color = eval.split(' ')[2];
+
+        if ( int.parse(eval.split(' ')[1]) > limits[color]! ) {
+          gameCounts = false;
+        }
+      }
+    }
+    if (gameCounts) {
+      sum += gameNum;
+    }
+  }
+  print('Day 2 part 1 answer: $sum');
+  sum = 0;
+  for(final e in lines){
+    var eSplit = e.split(':');
+    int gameNum = int.parse(eSplit[0].replaceAll(RegExp(r'[^0-9]'),'')); 
+    var pulls = eSplit[1].split(';');
+    var gameMin = {'red':0,'green':0,'blue':0};
+    int gameSum = 1;
+    for (final pull in pulls) {
+      var balls = pull.split(',');
+      for (final eval in balls) {
+
+        var color = eval.split(' ')[2];
+        if ( int.parse(eval.split(' ')[1]) > gameMin[color]! ) {
+          gameMin[color] = int.parse(eval.split(' ')[1]);
+        }
+        
+      }
+    }
+    for (final color in gameMin.values) {
+      gameSum *= color;
+    }
+    sum += gameSum;
+  }
+  print('Day 2 part 2 answer: $sum');
+
+    
+  }
+
 
 void day1() {
 
